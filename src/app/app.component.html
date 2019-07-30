@@ -1,3 +1,19 @@
+<h1>Performance Demo</h1>
+
+<ul>
+  <li *ngFor="let p of instructors">{{ p.name }} - {{ getGender(p) }}
+  </li>
+</ul>
+
+<!-- <ul>
+  <li *ngFor="let p of instructorsView">{{ p.name }} - {{ p.gender }}
+  </li>
+</ul> -->
+
+<button (click)="doNothing()">Click me</button>
+
+<hr>
+
 <svg width="550"
   height="550"
   (mousedown)="mouseDown($event)"

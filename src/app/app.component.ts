@@ -10,12 +10,25 @@ function getRandomInt(min, max) {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  instructors = [{ name: 'Kerry' }, { name: 'Luke' }, { name: 'Mario' }];
+  instructorsView = [];
+
   currentId = null;
   boxes = [];
   offsetX;
   offsetY;
 
+  getGender({ name }: { [name: string]: string }) {
+    console.log('get gender is called');
+    return name.length < 6 ? 'Male' : 'Female';
+  }
+
   ngOnInit() {
+    this.instructorsView = this.instructors.map((p) => ({
+      name: p.name,
+      gender: this.getGender(p),
+    }));
+
     for (let i = 0; i < 10000; i++) {
       const id = i;
       const x = getRandomInt(0, 500);
@@ -57,4 +70,6 @@ export class AppComponent implements OnInit {
 
     this.boxes[id] = { id, x, y }; // new references instead of mutation due to OnPush
   }
+
+  doNothing() {}
 }
