@@ -1,21 +1,22 @@
-<h1>Performance Demo</h1>
+<h1>Performance Demo at {{ currentDate }}</h1>
 
-<ul>
-  <li *ngFor="let p of instructors">{{ p.name }} - {{ getGender(p) }}
-  </li>
-</ul>
+<!-- <h3>{{ skill.name }} -- {{ getSkillRate(skill) }}</h3> -->
 
-<!-- <ul>
-  <li *ngFor="let p of instructorsView">{{ p.name }} - {{ p.gender }}
-  </li>
-</ul> -->
+<h3>{{ skillView?.name }} -- {{ skillView?.rate }}</h3>
 
 <button (click)="doNothing()">Click me</button>
 
 <hr>
 
-<svg width="550"
-  height="550"
+<app-child [name]="skillView.name"></app-child>
+
+<!-- Don't pass big object
+<app-child [skill]="skillView"></app-child> -->
+
+<hr>
+
+<!-- <svg width="500"
+  height="500"
   (mousedown)="mouseDown($event)"
   (mousemove)="mouseMove($event)"
   (mouseup)="mouseUp($event)">
@@ -24,4 +25,17 @@
     [box]="box"
     [selected]="box.id == currentId">
   </svg:g>
-</svg>
+</svg> -->
+
+<hr>
+
+<button (click)="reset()">reset item</button>
+<button (click)="change()">change item</button>
+
+<ul>
+  <li *ngFor="let b of items"> {{ b.name }}</li>
+</ul>
+
+<ul>
+  <li *ngFor="let b of items; trackBy: trackById"> {{ b.name }}</li>
+</ul>

@@ -1,4 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+  OnChanges,
+  DoCheck,
+  AfterContentInit,
+  AfterContentChecked,
+  AfterViewChecked,
+} from '@angular/core';
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -9,37 +19,44 @@ function getRandomInt(min, max) {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  instructors = [{ name: 'Kerry' }, { name: 'Luke' }, { name: 'Mario' }];
-  instructorsView = [];
+export class AppComponent
+  implements
+    OnChanges,
+    OnInit,
+    DoCheck,
+    AfterContentInit,
+    AfterContentChecked,
+    AfterViewInit,
+    AfterViewChecked {
+  constructor(private cdr: ChangeDetectorRef) {
+    this.cdr.detach();
+    // console.log('constructor: ');
+  }
+
+  skill = { name: 'Coding javascript' };
+  skillView: any;
 
   currentId = null;
   boxes = [];
   offsetX;
   offsetY;
 
-  getGender({ name }: { [name: string]: string }) {
-    console.log('get gender is called');
-    return name.length < 6 ? 'Male' : 'Female';
+  items = [{ name: 'Kerry', id: 1 }, { name: 'Luke', id: 2 }, { name: 'Magic Ma', id: 3 }];
+
+  getSkillRate({ name }: { [name: string]: string }) {
+    // console.log('getSkillRate function is called');
+    return 5;
   }
 
-  ngOnInit() {
-    this.instructorsView = this.instructors.map((p) => ({
-      name: p.name,
-      gender: this.getGender(p),
-    }));
+  get currentDate() {
+    console.log('PARENT date getter');
+    return new Date();
+    // return Date.now();
+  }
 
-    for (let i = 0; i < 10000; i++) {
-      const id = i;
-      const x = getRandomInt(0, 500);
-      const y = getRandomInt(0, 500);
-      const box = {
-        id,
-        x,
-        y,
-      };
-      this.boxes.push(box);
-    }
+  doNothing() {
+    // this.cdr.detectChanges();
+    this.cdr.reattach();
   }
 
   mouseDown(event) {
@@ -71,5 +88,63 @@ export class AppComponent implements OnInit {
     this.boxes[id] = { id, x, y }; // new references instead of mutation due to OnPush
   }
 
-  doNothing() {}
+  trackById(index, item) {
+    return item.id;
+  }
+
+  change() {
+    for (const item of this.items) {
+      item.id = item.id + 1;
+    }
+  }
+
+  reset() {
+    this.items = [{ name: 'Kerry', id: 1 }, { name: 'Luke', id: 2 }, { name: 'Magic Ma', id: 3 }];
+  }
+
+  ngOnChanges(): void {
+    // console.log('ngOnChanges: ');
+  }
+
+  ngOnInit() {
+    // console.log('ngOnInit: ');
+
+    this.skillView = { ...this.skill, rate: this.getSkillRate(this.skill) };
+
+    // for (let i = 0; i < 10000; i++) {
+    //   const id = i;
+    //   const x = getRandomInt(0, 500);
+    //   const y = getRandomInt(0, 500);
+    //   const box = {
+    //     id,
+    //     x,
+    //     y,
+    //   };
+    //   this.boxes.push(box);
+    // }
+  }
+
+  // trigger twice in dev mode
+  ngDoCheck(): void {
+    // console.warn('ngDoCheck: ');
+  }
+
+  ngAfterContentInit(): void {
+    // console.log('ngAfterContentInit: ');
+  }
+
+  // trigger twice in dev mode
+  ngAfterContentChecked(): void {
+    // console.warn('ngAfterContentChecked: ');
+  }
+
+  ngAfterViewInit() {
+    // console.log('ngAfterViewInit: ');
+    // this.cdr.detach();
+  }
+
+  // trigger twice in dev mode
+  ngAfterViewChecked(): void {
+    // console.warn('ngAfterViewChecked: ');
+  }
 }
